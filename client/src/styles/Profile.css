@@ -1,0 +1,22 @@
+.time-picker-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.custom-timepicker {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+.custom-timepicker:focus {
+  border-color: #4096ff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
