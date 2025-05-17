@@ -73,6 +73,7 @@ const authController = async (req, res) => {
 
 const applyDoctorController = async (req, res) => {
     try {
+        console.log(req.body);
         const newDoctor = await doctorModel({ ...req.body, status: "pending" });
         await newDoctor.save();
         

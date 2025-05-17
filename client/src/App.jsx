@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Register from "./pages/Register";
 import { useSelector } from "react-redux";
-import Spinner from "./components/spinner";
+
+import Spinner from './components/Spinner'
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import PublicRoute from "./components/PublicRoute";
