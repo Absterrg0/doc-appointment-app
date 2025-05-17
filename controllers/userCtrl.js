@@ -214,41 +214,50 @@ const bookAppointmentController = async (req, res) => {
 
 const bookingAvailabilityController = async (req, res) => {
     try {
-        const date = moment(req.body.date, "DD-MM-YY").toISOString();
-        const fromTime = moment(req.body.time, "HH:mm")
-            .subtract(1, "hours")
-            .toISOString();
-        const toTime = moment(req.body.time, "HH:mm").add(1, "hours").toISOString();
-        const doctorId = req.body.doctorId;
-        const appointments = await appointmentModel.find({
-            doctorId,
-            date,
-            time: {
-                $gte: fromTime,
-                $lte: toTime,
-            },
+      const { doctorId, date, time } = req.body;
+  
+      // Combine date and time into one moment object
+      const dateTime = moment(`${date} ${time}`, "DD-MM-YYYY HH:mm");
+  
+      if (!dateTime.isValid()) {
+        return res.status(400).send({
+          success: false,
+          message: "Invalid date or time format",
         });
-        if (appointments.length > 0) {
-            return res.status(200).send({
-                message: "Appointments not Availibale at this time",
-                success: true,
-            });
-        } else {
-            return res.status(200).send({
-                success: true,
-                message: "Appointments available",
-            });
-        }
+      }
+  
+      const fromTime = dateTime.clone().subtract(1, "hour").toISOString();
+      const toTime = dateTime.clone().add(1, "hour").toISOString();
+  
+      const appointments = await appointmentModel.find({
+        doctorId,
+        time: {
+          $gte: fromTime,
+          $lte: toTime,
+        },
+      });
+      console.log(appointments);
+      if (appointments.length > 0) {
+        return res.status(200).send({
+          success: false,
+          message: "Appointments not available at this time",
+        });
+      } else {
+        return res.status(200).send({
+          success: true,
+          message: "Appointments available",
+        });
+      }
     } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            success: false,
-            error,
-            message: "Error In Booking",
-        });
+      console.error(error);
+      res.status(500).send({
+        success: false,
+        message: "Error checking booking availability",
+        error: error.message,
+      });
     }
-};
-
+  };
+  
 
 
 module.exports = { loginController, registeController, authController, applyDoctorController, getAllNotificationController, deleteAllNotificationController, getAllDoctorController, bookAppointmentController, bookingAvailabilityController }

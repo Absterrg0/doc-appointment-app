@@ -38,6 +38,7 @@ const BookingPage = () => {
   const handleAvailability = async () => {
     try {
       dispatch(showLoadings());
+
       const res = await axios.post(
         "/api/v1/user/booking-availability",
         { doctorId: params.doctorId, date, time },
@@ -47,10 +48,10 @@ const BookingPage = () => {
           },
         }
       );
+
       dispatch(hideLoading());
       if (res.data.success) {
         setIsAvailable(true);
-        console.log(isAvailable);
         message.success(res.data.message);
       } else {
         message.error(res.data.message);
@@ -118,7 +119,7 @@ const BookingPage = () => {
                 className="m-2"
                 format="DD-MM-YYYY"
                 onChange={(value) => {
-                  setDate(moment(value).format("DD-MM-YYYY"));
+                  setDate(value.format("DD-MM-YYYY"));
                 }}
               />
               <TimePicker
@@ -126,7 +127,7 @@ const BookingPage = () => {
                 format="HH:mm"
                 className="mt-3"
                 onChange={(value) => {
-                  setTime(moment(value).format("HH:mm"));
+                  setTime(value.format("HH:mm"));
                 }}
               />
 
